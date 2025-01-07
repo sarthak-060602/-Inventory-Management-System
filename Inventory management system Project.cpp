@@ -32,8 +32,8 @@ struct Product {
 int mainMenu();
 int subMenu();
 void customerService(Connection* conn, int customerId);
-void displayOrderStatus(Connection* conn, int orderId, int customerId); // you write this function
-void cancelOrder(Connection* conn, int orderId, int customerId); // you write this function
+void displayOrderStatus(Connection* conn, int orderId, int customerId);
+void cancelOrder(Connection* conn, int orderId, int customerId);
 void createEnvironement(Environment* env);
 void openConnection(Environment* env, Connection* conn, string user, string pass, string constr);
 void closeConnection(Connection* conn, Environment* env);
@@ -48,13 +48,11 @@ int checkout(Connection* conn, struct ShoppingCart cart[], int customerId, int p
 int main(void)
 {
     int option;
-    /* OCCI Variables */
     Environment* env = nullptr;
     Connection* conn = nullptr;
     //Statement* stmt = nullptr;
     //ResultSet* rs = nullptr;
 
-    /* Used Variables */
     string str;
     string user = "dbs311_243nbb07";
     string pass = "Chamoporp@1";
@@ -212,7 +210,6 @@ void displayOrderStatus(Connection* conn, int orderId, int customerId) {
     Statement* stmt = nullptr;
 
     try {
-        // Step 1: Verify if the order ID belongs to the customer
         int orderBelongsToCustomer = 0;
         stmt = conn->createStatement("BEGIN customer_order(:1, :2, :3); END;");
         stmt->setInt(1, orderId);
@@ -227,7 +224,6 @@ void displayOrderStatus(Connection* conn, int orderId, int customerId) {
             return;
         }
 
-        // Step 2: Retrieve the order status
         string orderStatus;
         stmt->setSQL("BEGIN display_order_status(:1, :2); END;");
         stmt->setInt(1, orderId);
@@ -254,7 +250,6 @@ void cancelOrder(Connection* conn, int orderId, int customerId) {
     Statement* stmt = nullptr;
 
     try {
-        // Step 1: Verify if the order ID belongs to the customer
         int orderBelongsToCustomer = 0;
         stmt = conn->createStatement("BEGIN customer_order(:1, :2, :3); END;");
         stmt->setInt(1, orderId);
@@ -269,7 +264,6 @@ void cancelOrder(Connection* conn, int orderId, int customerId) {
             return;
         }
 
-        // Step 2: Attempt to cancel the order
         int cancelStatus = 0;
         stmt->setSQL("BEGIN cancel_order(:1, :2); END;");
         stmt->setInt(1, orderId);
